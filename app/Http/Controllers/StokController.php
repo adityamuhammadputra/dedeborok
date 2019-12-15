@@ -19,6 +19,7 @@ class StokController extends Controller
     public function index()
     {
         $datas = Transaksi::with('details','user')->filtered()->paginate(7);
+       
         return view('stok.index', compact('datas'));
     }
 
@@ -30,6 +31,7 @@ class StokController extends Controller
             'action' => url('stok'),
             'type' => 'POST'
         ];
+
         return view('stok.form', compact('data'));
     }
 
@@ -58,7 +60,9 @@ class StokController extends Controller
             TransaksiDetail::create($detail);
         }
 
-        return 'berhasil';
+        toastr()->error('An error has occurred please try again later.');
+
+        return redirect(url('stok'));
     }
 
     /**

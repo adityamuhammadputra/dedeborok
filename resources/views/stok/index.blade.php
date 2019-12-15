@@ -20,7 +20,6 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>No</th>
                 <th>Nama Agen</th>
                 <th width="300px">Alamat Agen</th>
                 <th>Tanggal</th>
@@ -35,7 +34,6 @@
         <tbody>
             @foreach ($datas as $key => $d)
             <tr>
-                <td>{{ $datas->firstItem() + $key }}</td>
                 <td>
                     <a target="_blank" href="{{ $d->user->photo }}"><img src="{{ $d->user->photo }}" alt="user" width="52" height="55" class="rounded-circle float-left"></a>
                     <div class="details">

@@ -21,6 +21,7 @@
     <link href="../../matrix/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css" rel="stylesheet">
     <link href="../../matrix/dist/css/style.min.css" rel="stylesheet">
     <link href="../../matrix/dist/css/jconfirm.min.css" rel="stylesheet">
+    @toastr_css
     <style>
     .table th, .table thead th {
         font-weight: 1000;
@@ -370,15 +371,14 @@
     <script src="../../matrix/assets/libs/jquery-minicolors/jquery.minicolors.min.js"></script>
     <script src="../../matrix/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
     <script src="../../matrix/assets/extra-libs/DataTables/datatables.min.js"></script>
-
-
+    @toastr_js
+    @toastr_render
 
     <script>
         //***********************************//
         // For select 2
         //***********************************//
         $(".select2").select2();
-
         /*toastr*/
         toastr.options = {
             "closeButton": false,

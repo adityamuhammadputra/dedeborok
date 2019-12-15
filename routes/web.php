@@ -18,4 +18,11 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::resource('home', 'HomeController');
+Route::resource('stok', 'StokController');
+Route::resource('monitoring', 'MonitoringController');
+
+Route::group(['prefix' => 'master'], function () {
+    Route::resource('agen', 'AgenController');
+    Route::resource('barang', 'BarangController');
+});
 

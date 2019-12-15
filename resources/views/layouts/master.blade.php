@@ -16,10 +16,17 @@
     <title>Matrix Template - The Ultimate Multipurpose admin template</title>
     <!-- Custom CSS -->
     <link rel="stylesheet" type="text/css" href="../../matrix/assets/libs/select2/dist/css/select2.min.css">
-    <link rel="stylesheet" type="text/css" href="../../matrix/assets/libs/jquery-minicolors/jquery.minicolors.css">
     <link rel="stylesheet" type="text/css" href="../../matrix/assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
-    <link rel="stylesheet" type="text/css" href="../../matrix/assets/libs/quill/dist/quill.snow.css">
+
+    <link href="../../matrix/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css" rel="stylesheet">
     <link href="../../matrix/dist/css/style.min.css" rel="stylesheet">
+    <link href="../../matrix/dist/css/jconfirm.min.css" rel="stylesheet">
+    <style>
+    .table th, .table thead th {
+        font-weight: 1000;
+        background: #ced3d8;
+    }
+    </style>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -233,13 +240,19 @@
                 <!-- Sidebar navigation-->
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav" class="p-t-30">
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="index.html" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Dashboard</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="charts.html" aria-expanded="false"><i class="mdi mdi-chart-bar"></i><span class="hide-menu">Stok Barang</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="widgets.html" aria-expanded="false"><i class="mdi mdi-blur-linear"></i><span class="hide-menu">Monitoring</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-account-key"></i><span class="hide-menu">Master </span></a>
+                        <li class="sidebar-item {{ (request()->is('home')) ? 'selected' : '' }}">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url('home') }}" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Dashboard</span></a>
+                        </li>
+                        <li class="sidebar-item {{ (request()->is('stok')) ? 'selected' : '' }}">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url('stok') }}" aria-expanded="false"><i class="mdi mdi-chart-bar"></i><span class="hide-menu">Stok Barang</span></a>
+                        </li>
+                        <li class="sidebar-item {{ (request()->is('monitoring')) ? 'selected' : '' }}">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url('monitoring') }}" aria-expanded="false"><i class="mdi mdi-blur-linear"></i><span class="hide-menu">Monitoring</span></a>
+                        </li>
+                        <li class="sidebar-item {{ (request()->is('master*')) ? 'selected' : '' }}"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-account-key"></i><span class="hide-menu">Master </span></a>
                             <ul aria-expanded="false" class="collapse  first-level">
-                                <li class="sidebar-item"><a href="authentication-login.html" class="sidebar-link"><i class="mdi mdi-all-inclusive"></i><span class="hide-menu"> User </span></a></li>
-                                <li class="sidebar-item"><a href="authentication-register.html" class="sidebar-link"><i class="mdi mdi-all-inclusive"></i><span class="hide-menu"> Agen</span></a></li>
+                                <li class="sidebar-item"><a href="{{  url('master/agen') }}" class="sidebar-link"><i class="mdi mdi-all-inclusive"></i><span class="hide-menu"> Agen</span></a></li>
+                                <li class="sidebar-item"><a href="{{  url('master/barang') }}" class="sidebar-link"><i class="mdi mdi-all-inclusive"></i><span class="hide-menu"> Barang </span></a></li>
                             </ul>
                         </li>
                     </ul>
@@ -261,21 +274,46 @@
             <div class="page-breadcrumb">
                 <div class="row">
                     <div class="col-12 d-flex no-block align-items-center">
-                        <h4 class="page-title">@yield('judul-table')</h4>
-                        <div class="ml-auto text-right">
+                        {{-- <h4 class="page-title">@yield('judul-table')</h4> --}}
+                        <div style="width: 100%;">
                             <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
+                                <ol class="breadcrumb" style="float: left;">
                                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">@yield('judul-table')</li>
+                                    <li class="breadcrumb-item active" aria-current="page">
+                                        @yield('judul')
+                                    </li>
                                 </ol>
+                                @hasSection('page-tools')
+                                    @yield('page-tools')
+                                @endif
                             </nav>
+
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="container-fluid">
-                @yield('content')
+                <div class="card">
+                    <div class="card-body">
+                        @hasSection('judul-table')
+                        <h5 class="card-title" style="padding-bottom: 25px;border-bottom: 1px solid #e4e4e4;margin-bottom: 30px;">
+                            @yield('judul-table')
+                            <form method="GET">
+                                <div class="col-md-2" style="float: right;position: relative;top: -20px;left: 5px;">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="q" value="{{ request()->q ?? '' }}">
+                                        <div class="input-group-append">
+                                            <button class="input-group-text btn btn-info"><i class="fas fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </h5>
+                        @endif
+                            @yield('content')
+                    </div>
+                </div>
             </div>
 
 
@@ -316,6 +354,8 @@
     <script src="../../matrix/dist/js/sidebarmenu.js"></script>
     <!--Custom JavaScript -->
     <script src="../../matrix/dist/js/custom.min.js"></script>
+    <script src="../../matrix/dist/js/jconfirm.min.js"></script>
+    <script src="../../matrix/dist/js/toastr.min.js"></script>
     <!-- This Page JS -->
     <script src="../../matrix/assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
     <script src="../../matrix/dist/js/pages/mask/mask.init.js"></script>
@@ -326,47 +366,85 @@
     <script src="../../matrix/assets/libs/jquery-asColorPicker/dist/jquery-asColorPicker.min.js"></script>
     <script src="../../matrix/assets/libs/jquery-minicolors/jquery.minicolors.min.js"></script>
     <script src="../../matrix/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-    <script src="../../matrix/assets/libs/quill/dist/quill.min.js"></script>
+    <script src="../../matrix/assets/extra-libs/DataTables/datatables.min.js"></script>
+
+
+
     <script>
         //***********************************//
         // For select 2
         //***********************************//
         $(".select2").select2();
 
-        /*colorpicker*/
-        $('.demo').each(function() {
-        //
-        // Dear reader, it's actually very easy to initialize MiniColors. For example:
-        //
-        //  $(selector).minicolors();
-        //
-        // The way I've done it below is just for the demo, so don't get confused
-        // by it. Also, data- attributes aren't supported at this time...they're
-        // only used for this demo.
-        //
-        $(this).minicolors({
-                control: $(this).attr('data-control') || 'hue',
-                position: $(this).attr('data-position') || 'bottom left',
+        /*toastr*/
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
 
-                change: function(value, opacity) {
-                    if (!value) return;
-                    if (opacity) value += ', ' + opacity;
-                    if (typeof console === 'object') {
-                        console.log(value);
-                    }
+        /*datatables*/
+        $.extend( true, $.fn.dataTable.defaults, {
+            colReorder: true,
+            processing: true,
+            serverSide:true,
+            language: {
+                lengthMenu: "Menampilkan _MENU_",
+                zeroRecords: "Data yang anda cari tidak ada, Silahkan masukan keyword lainnya",
+                info: "Halaman _PAGE_ dari _PAGES_ Halaman",
+                infoEmpty: "-",
+                infoFiltered: "(dari _MAX_ total data)",
+                loadingRecords: "Silahkan Tunggu...",
+                processing:     "Dalam Proses...",
+                search:         "Cari:",
+                paginate: {
+                    first:      "Awal",
+                    last:       "Akhir",
+                    next:       "Selanjutnya",
+                    previous:   "Kembali"
                 },
-                theme: 'bootstrap'
-            });
+            },
+            aLengthMenu: [[5, 10,25, 50, 75, -1], [5, 10,25, 50, 75, "Semua"]],
+        } );
 
-        });
+        // jconfirm
+
+        jconfirm.defaults = {
+            title: 'Konfirmasi !',
+            titleClass: '',
+            type: 'red',
+            typeAnimated: true,
+            draggable: true,
+            dragWindowGap: 15,
+            dragWindowBorder: true,
+            animateFromElement: true,
+            smoothContent: true,
+            icon: 'fa fa-spinner fa-spin',
+            lazyOpen: false,
+            buttons: {
+                confirm: {
+                    btnClass: 'btn-info',
+                }
+            },
+        }
+
         /*datwpicker*/
         jQuery('.mydatepicker').datepicker();
         jQuery('#datepicker-autoclose').datepicker({
             autoclose: true,
             todayHighlight: true
-        });
-        var quill = new Quill('#editor', {
-            theme: 'snow'
         });
 
     </script>

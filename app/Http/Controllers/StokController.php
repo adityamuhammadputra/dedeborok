@@ -60,7 +60,7 @@ class StokController extends Controller
             TransaksiDetail::create($detail);
         }
 
-        toastr()->error('An error has occurred please try again later.');
+        toastr()->success('Data berhasil disimpan');
 
         return redirect(url('stok'));
     }

@@ -18,7 +18,7 @@ class StokController extends Controller
      */
     public function index()
     {
-        $datas = Transaksi::with('details','user')->filtered()->paginate();
+        $datas = Transaksi::with('details','user')->filtered()->paginate(7);
         return view('stok.index', compact('datas'));
     }
 

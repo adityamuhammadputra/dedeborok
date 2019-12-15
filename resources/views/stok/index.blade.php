@@ -22,7 +22,7 @@
             <tr>
                 <th>No</th>
                 <th>Nama Agen</th>
-                <th>Alamat Agen</th>
+                <th width="300px">Alamat Agen</th>
                 <th>Tanggal</th>
                 <th>No. Transaksi</th>
                 <th>Detail Barang</th>

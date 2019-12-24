@@ -5,6 +5,13 @@
 @section('page-tools')
     <a href="{{ route('stok.create') }}" class="btn btn-info btn-sm float-right"><i class="mdi mdi-plus"></i> Tambah</a>
 @endsection
+@section('page-filters')
+<select name="s" class="form-control">
+    <option selected value="">-- Pilih Status --</option>
+    <option value="1" {{ (request('s') == 1) ? 'selected' : '' }}>Request</option>
+    <option value="2" {{ (request('s') == 2) ? 'selected' : '' }}>Selesai</option>
+</select>
+@endsection
 
 @section('content')
 <style>
@@ -49,15 +56,15 @@
                 <td>@money($d->details->sum('total_harga'))</td>
                 <td>{!! ($d->status == 1) ? '<span class="badge badge-pill badge-info">Request</span>' : '<span class="badge badge-pill badge-success">Selesai</span>' !!}</td>
                 <td>
-                    <a href="{{ url('barang', $d->id) }}/edit" class="btn btn-cyan btn-sm">Lihat</a>
-                    <a href="{{ url('barang', $d->id) }}" class="btn btn-danger btn-sm">Hapus</a>
+                    <a href="{{ url('stok', $d->id) }}/edit" class="btn btn-cyan btn-sm">Lihat</a>
+                    <a href="{{ url('stok', $d->id) }}" class="btn btn-danger btn-sm">Hapus</a>
                 </td>
             </tr>
             @endforeach
         </tbody>
     </table>
 
-    {{ $datas->appends(['q' => $_GET['q'] ?? null]  )->links() }}
+    {{ $datas->appends(['q' => $_GET['q'] ?? null, 's' => $_GET['s'] ?? null]  )->links() }}
 
 @endsection
 

@@ -8,18 +8,24 @@ class Transaksi extends Model
 {
     protected $appends = ['plucks'];
     protected $guarded = [''];
+    protected $primaryKey = 'id';
 
     public function scopeFiltered($query)
     {
         $query->when(request('q'), function ($query) {
             $param = '%' . request('q') . '%';
             $query->whereHas('user', function($q) use($param){
-                $q->where('nama_agen', 'like', $param)
-                    ->orWhere('alamat', 'like', $param);
+                $q->where('nama_agen', 'like', $param);
             })->orWhereHas('details', function($q) use($param){
-                $q->where('value', 'like', $param)
-                    ->orWhere('harga', 'like', $param);
+                $q->where('total_harga', 'like', $param)
+                    ->orWhereHas('barang', function($q2) use($param){
+                        $q2->where('nama', 'like', $param);
+                    });
             });
+        });
+
+        $query->when(request('s'), function ($query) {
+            $query->where('status', request('s'));
         });
     }
 

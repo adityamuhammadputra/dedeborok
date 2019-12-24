@@ -303,6 +303,7 @@
                         @hasSection('judul-table')
                         <h5 class="card-title" style="padding-bottom: 25px;border-bottom: 1px solid #e4e4e4;margin-bottom: 30px;">
                             @yield('judul-table')
+                            @hasSection('page-filters')
                             <form method="GET">
                                 <div class="col-md-2" style="float: right;position: relative;top: -20px;left: 5px;">
                                     <div class="input-group">
@@ -312,7 +313,11 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-2" style="float: right;position: relative;top: -20px;left: 5px;">
+                                    @yield('page-filters')
+                                </div>
                             </form>
+                            @endif
                         </h5>
                         @endif
                             @yield('content')

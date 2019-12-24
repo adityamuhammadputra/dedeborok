@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class TransaksiDetail extends Model
 {
     protected $guarded = [''];
-    
+
     public function transaksi()
     {
         return $this->belongsTo(TransaksiDetail::class);
@@ -17,6 +17,4 @@ class TransaksiDetail extends Model
     {
         return $this->belongsTo(Barang::class);
     }
-
-
 }

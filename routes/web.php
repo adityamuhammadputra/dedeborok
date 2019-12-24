@@ -18,7 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::resource('home', 'HomeController');
-Route::resource('stok', 'StokController');
+Route::resource('stok', 'StokController')->except('show');
 Route::resource('monitoring', 'MonitoringController');
 
 Route::group(['prefix' => 'master'], function () {

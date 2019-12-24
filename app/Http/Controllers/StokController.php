@@ -18,8 +18,8 @@ class StokController extends Controller
      */
     public function index()
     {
-        $datas = Transaksi::with('details','user')->filtered()->paginate(7);
-       
+        $datas = Transaksi::filtered()->paginate(7);
+
         return view('stok.index', compact('datas'));
     }
 
@@ -55,7 +55,7 @@ class StokController extends Controller
                 'barang_id' => $request->barang_id[$key],
                 'total_harga' => $request->total_harga[$key],
                 'value' => $request->value[$key],
-                
+
             ];
             TransaksiDetail::create($detail);
         }
@@ -71,11 +71,18 @@ class StokController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function edit(Transaksi $transaksi, $id)
     {
-        //
+        $transaksi = Transaksi::find($id);
+        $data = (object)[
+            'barang' => Barang::where('stok', '>', 0)->get(),
+            'agen' => User::whereNull('status')->get(),
+            'action' => url('stok', $transaksi->id),
+            'type' => 'PATCH',
+            'transaksi' => $transaksi
+        ];
 
-        return 'x';
+        return view('stok.form', compact('data'));
     }
 
     /**
@@ -84,11 +91,7 @@ class StokController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
-        return 'x';
-    }
+
 
     /**
      * Update the specified resource in storage.
@@ -99,7 +102,38 @@ class StokController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $transaksi = Transaksi::find($id);
+        $transaksi->user_id = $request->agen_id;
+        $transaksi->status = $request->s;
+        $transaksi->save();
+
+        foreach($request->id_old as $key => $val){
+            $detail = TransaksiDetail::find($val);
+            $detail->barang_id = $request->barang_id_new[$key];
+            $detail->value = $request->value_new[$key];
+            $detail->total_harga = $request->total_harga_new[$key];
+            $detail->save();
+        }
+
+        if($request->barang_id ){
+            foreach($request->barang_id as $key => $val){
+                $detail = [
+                    'transaksi_id' => $transaksi->id,
+                    'barang_id' => $request->barang_id[$key],
+                    'total_harga' => $request->total_harga[$key],
+                    'value' => $request->value[$key],
+
+                ];
+                TransaksiDetail::create($detail);
+            }
+        }
+
+        if($request->detail_deleted){
+            $id_deleted = explode(',', $request->detail_deleted);
+            TransaksiDetail::whereIn('id', $id_deleted)->delete();
+        }
+
+        return $request;
     }
 
     /**

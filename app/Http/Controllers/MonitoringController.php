@@ -15,6 +15,7 @@ class MonitoringController extends Controller
     public function index()
     {
         $datas = Stok::filtered()->paginate(7);
+        toastr()->success('Transaksi <b> Test </b> ');
         return view('monitoring.index', compact('datas'));
     }
 

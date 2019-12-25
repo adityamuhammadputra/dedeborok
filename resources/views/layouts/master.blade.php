@@ -374,6 +374,8 @@
     <script src="../../matrix/assets/libs/jquery-minicolors/jquery.minicolors.min.js"></script>
     <script src="../../matrix/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
     <script src="../../matrix/assets/extra-libs/DataTables/datatables.min.js"></script>
+
+    @toastr_js
     @toastr_render
 
     <script>

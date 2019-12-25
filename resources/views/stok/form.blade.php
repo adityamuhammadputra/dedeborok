@@ -17,7 +17,7 @@
                 <div class="col-md-3">
                     <input type="text" class="form-control" placeholder="{{ isset($data->transaksi->created_at) ? datesOrder($data->transaksi->created_at) : datesOrder(\Carbon\Carbon::now()) }}" disabled>
                 </div>
-
+                @if ($data->type != 'POST')
                 <label class="col-md-4"></label>
                 <div class="col-md-2">
                     <select name="s" class="form-control" style="background: #2255a4;color: white;">
@@ -25,6 +25,7 @@
                         <option value="2" {{ ($data->transaksi->status == 2) ? 'selected' : '' }}>Selesai</option>
                     </select>
                 </div>
+                @endif
             </div>
             <div class="form-group row">
                 <label class="col-md-3">Nama Agen</label>
@@ -63,35 +64,37 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($data->transaksi->details as $d)
-                    <tr>
-                        <td>
-                            <select class="form-control namas" placeholder="Nama Barang" style="width:100%px;" required>
-                                @foreach ($data->barang as $val)
-                                    <option data-kategori="{{ $val->kategori }}"
-                                        data-satuan="{{ $val->satuan }}"
-                                        data-harga="{{ $val->harga }}"
-                                        value="{{ $val->id }}"
-                                        {{ (isset($d->barang->id) && $d->barang->id == $val->id) ? 'selected' : '' }}>
-                                        {{ $val->nama }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </td>
-                        <td>
-                            <input type="hidden" name="id_old[]" class="form-control" placeholder="Kode Barang"  readonly value="{{ $d->id }}"/>
-                            <input type="number" name="value_new[]" class="form-control jumlah" placeholder="Jumlah" required value="{{ $d->value }}"/>
-                        </td>
-                        <td>
-                            <input type="text" class="form-control barang_temp" placeholder="Kode Barang"  readonly value="BR-001{{ $d->barang_id }}"/>
-                            <input type="hidden" name="barang_id_new[]" class="form-control barang_id" placeholder="Kode Barang"  readonly value="{{ $d->barang_id }}"/>
-                        </td>
-                        <td><input type="text" class="form-control kategori" placeholder="kategori Barang" readonly  value="{{ $d->barang->kategori }}"/></td>
-                        <td><input type="text" class="form-control satuan" placeholder="Harga / Satuan Barang" readonly value="{{ $d->barang->harga }} / {{ $d->barang->satuan }}"><input type="hidden" class="harga" value="{{ $d->barang->harga }}"/></td>
-                        <td><input type="text" name="total_harga_new[]" class="form-control total_harga" placeholder="Total Harga" readonly value="{{ $d->total_harga }}"/></td>
-                        <td><button type="button" class="btn btn-danger delete-detail btn-sm float-right" data-id="{{ $d->id }}"><i class="fa fa-minus"></i></button></td>
-                    </tr>
-                @endforeach
+                @if ($data->type != 'POST')
+                    @foreach ($data->transaksi->details as $d)
+                        <tr>
+                            <td>
+                                <select class="form-control namas" placeholder="Nama Barang" style="width:100%px;" required>
+                                    @foreach ($data->barang as $val)
+                                        <option data-kategori="{{ $val->kategori }}"
+                                            data-satuan="{{ $val->satuan }}"
+                                            data-harga="{{ $val->harga }}"
+                                            value="{{ $val->id }}"
+                                            {{ (isset($d->barang->id) && $d->barang->id == $val->id) ? 'selected' : '' }}>
+                                            {{ $val->nama }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td>
+                                <input type="hidden" name="id_old[]" class="form-control" placeholder="Kode Barang"  readonly value="{{ $d->id }}"/>
+                                <input type="number" name="value_old[]" class="form-control jumlah" placeholder="Jumlah" required value="{{ $d->value }}"/>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control barang_temp" placeholder="Kode Barang"  readonly value="BR-001{{ $d->barang_id }}"/>
+                                <input type="hidden" name="barang_id_old[]" class="form-control barang_id" placeholder="Kode Barang"  readonly value="{{ $d->barang_id }}"/>
+                            </td>
+                            <td><input type="text" class="form-control kategori" placeholder="kategori Barang" readonly  value="{{ $d->barang->kategori }}"/></td>
+                            <td><input type="text" class="form-control satuan" placeholder="Harga / Satuan Barang" readonly value="{{ $d->barang->harga }} / {{ $d->barang->satuan }}"><input type="hidden" class="harga" value="{{ $d->barang->harga }}"/></td>
+                            <td><input type="text" name="total_harga_old[]" class="form-control total_harga" placeholder="Total Harga" readonly value="{{ $d->total_harga }}"/></td>
+                            <td><button type="button" class="btn btn-danger delete-detail btn-sm float-right" data-id="{{ $d->id }}"><i class="fa fa-minus"></i></button></td>
+                        </tr>
+                    @endforeach
+                @endif
             </tbody>
         </table>
 

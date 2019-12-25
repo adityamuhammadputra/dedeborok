@@ -5,7 +5,9 @@
 @section('page-tools')
     <a href="{{ route('barang.create') }}" class="btn btn-info float-right"><i class="mdi mdi-plus"></i> Tambah Barang</a>
 @endsection
-
+@section('page-filters')
+<i></i>
+@endsection
 @section('content')
     <table class="table table-hover">
         <thead>
@@ -27,7 +29,8 @@
                 <td>{{ $d->harga }}</td>
                 <td>{{ $d->stok }}</td>
                 <td>
-                    aksi
+                    <a href="{{ url('master/barang', $d->id) }}/edit" class="btn btn-cyan btn-sm">Lihat</a>
+                    <a id="deleteData" data-id="{{ $d->id }}" data-title="{{ $d->nama_agen }}" class="btn btn-danger btn-sm">Hapus</a>
                 </td>
             </tr>
             @endforeach

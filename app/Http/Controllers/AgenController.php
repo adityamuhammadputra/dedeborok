@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 
 class AgenController extends Controller
@@ -13,7 +14,8 @@ class AgenController extends Controller
      */
     public function index()
     {
-        //
+        $datas = User::whereNull('status')->filtered()->paginate(7);
+        return view('agen.index', compact('datas'));
     }
 
     /**

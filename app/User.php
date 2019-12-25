@@ -36,4 +36,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public function scopeFiltered($query)
+    {
+        $query->when(request('q'), function ($query) {
+            $param = '%' . request('q') . '%';
+            $query->where('nama_agen', 'like', $param)
+            ->orWhere('alamat', 'like', $param);
+        });
+    }
 }

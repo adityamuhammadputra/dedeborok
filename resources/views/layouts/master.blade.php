@@ -21,7 +21,7 @@
     <link href="../../matrix/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css" rel="stylesheet">
     <link href="../../matrix/dist/css/style.min.css" rel="stylesheet">
     <link href="../../matrix/dist/css/jconfirm.min.css" rel="stylesheet">
-    @toastr_css
+    <link href="../../matrix/dist/css/toastr.min.css" rel="stylesheet">
     <style>
     .table th, .table thead th {
         font-weight: 1000;
@@ -214,15 +214,13 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="../../matrix/assets/images/users/1.jpg" alt="user" class="rounded-circle" width="31"></a>
                             <div class="dropdown-menu dropdown-menu-right user-dd animated">
-                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-user m-r-5 m-l-5"></i> My Profile</a>
-                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-wallet m-r-5 m-l-5"></i> My Balance</a>
-                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-email m-r-5 m-l-5"></i> Inbox</a>
-                                <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="javascript:void(0)"><i class="ti-settings m-r-5 m-l-5"></i> Account Setting</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="javascript:void(0)"><i class="fa fa-power-off m-r-5 m-l-5"></i> Logout</a>
+                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fa fa-power-off m-r-5 m-l-5"></i>&nbsp;&nbsp;Log Out</a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
                                 <div class="dropdown-divider"></div>
-                                <div class="p-l-30 p-10"><a href="javascript:void(0)" class="btn btn-sm btn-success btn-rounded">View Profile</a></div>
                             </div>
                         </li>
                         <!-- ============================================================== -->
@@ -247,7 +245,7 @@
                         <li class="sidebar-item {{ (request()->is('home')) ? 'selected' : '' }}">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url('home') }}" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Dashboard</span></a>
                         </li>
-                        <li class="sidebar-item {{ (request()->is('stok')) ? 'selected' : '' }}">
+                        <li class="sidebar-item {{ (request()->is('stok*')) ? 'selected' : '' }}">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url('stok') }}" aria-expanded="false"><i class="mdi mdi-chart-bar"></i><span class="hide-menu">Stok Barang</span></a>
                         </li>
                         <li class="sidebar-item {{ (request()->is('monitoring')) ? 'selected' : '' }}">
@@ -304,7 +302,7 @@
                         <h5 class="card-title" style="padding-bottom: 25px;border-bottom: 1px solid #e4e4e4;margin-bottom: 30px;">
                             @yield('judul-table')
                             @hasSection('page-filters')
-                            <form method="GET">
+                            <form method="GET" id="form-filters">
                                 <div class="col-md-2" style="float: right;position: relative;top: -20px;left: 5px;">
                                     <div class="input-group">
                                         <input type="text" class="form-control" name="q" value="{{ request()->q ?? '' }}">
@@ -376,7 +374,6 @@
     <script src="../../matrix/assets/libs/jquery-minicolors/jquery.minicolors.min.js"></script>
     <script src="../../matrix/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
     <script src="../../matrix/assets/extra-libs/DataTables/datatables.min.js"></script>
-    @toastr_js
     @toastr_render
 
     <script>

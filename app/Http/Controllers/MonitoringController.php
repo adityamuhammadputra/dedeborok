@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Stok;
 use Illuminate\Http\Request;
 
 class MonitoringController extends Controller
@@ -13,7 +14,8 @@ class MonitoringController extends Controller
      */
     public function index()
     {
-        //
+        $datas = Stok::filtered()->paginate(7);
+        return view('monitoring.index', compact('datas'));
     }
 
     /**

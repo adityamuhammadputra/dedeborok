@@ -22,6 +22,9 @@
         .p-t-20{
             padding-top: 20px;
         }
+        .p-b-30{
+            padding-bottom: 30px;
+        }
     </style>
 <body>
 
